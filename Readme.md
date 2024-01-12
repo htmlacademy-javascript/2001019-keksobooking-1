@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Неопознанный енот](https://up.htmlacademy.ru/javascript-individual/1/user/2001019).
-* Наставник: `Неизвестно`.
+* Наставник: `Rail Sakhaviev`.
 
 ---
 
