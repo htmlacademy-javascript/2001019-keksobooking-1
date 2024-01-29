@@ -53,18 +53,22 @@ const DESCRIPTION = [
   'Нас выбираю все транзитные путешественники. Находимся рядом с автобусным и ЖД вокзалом!',
 ];
 
-const PHOTOS =[
+const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
 
-function getRandomNumber(min, max, count = 0) {
-  const rand = Math.abs(min) + Math.random() * (Math.abs(max) + 1 - Math.abs(min));
-  return Number(rand.toFixed(count));
+function padStart(rawString, size, template) {
+  return rawString.toString().padStart(size, template);
 }
 
+function getRandomNumber(min, max, count = 0) {
+  // const rand = Math.abs(min) + Math.random() * (Math.abs(max) + 1 - Math.abs(min));
+  const rand = Math.abs(min) + Math.random() * (Math.abs(max) - Math.abs(min));
+  return Number(rand.toFixed(count));
+}
 
 
 function createRandomIdFromRangeGenerator (min, max, count = 0) {
@@ -74,7 +78,7 @@ function createRandomIdFromRangeGenerator (min, max, count = 0) {
     let currentValue = getRandomNumber(min, max, count);
     // Так как будет использоваться только для координат, можно забить на уникальность
     if (!count && previousValues.length >= (max - min + 1)) {
-      console.error('Перебраны все числа из диапазона от ' + min + ' до ' + max);
+      // console.error('Перебраны все числа из диапазона от ' + min + ' до ' + max);
       return null;
     }
     while (previousValues.includes(currentValue)) {
@@ -84,25 +88,24 @@ function createRandomIdFromRangeGenerator (min, max, count = 0) {
     return currentValue;
   };
 }
-console.log(createRandomIdFromRangeGenerator(1, 10));
-const generatePhotoId = createRandomIdFromRangeGenerator(1, 3);
+
+function generateUrlId() {
+  const ID = createRandomIdFromRangeGenerator(1, 10);
+  const IDStr = padStart(ID(), 2, 0);
+
+  return IDStr;
+}
+
 const generateLat = createRandomIdFromRangeGenerator(35.65, 35.7, 5);
 const generateLng = createRandomIdFromRangeGenerator(139.70000, 139.80000, 5);
-const generateAvatarId = createRandomIdFromRangeGenerator(1, 10);
-const avatarUrl = 'img/avatars/user' + generateAvatarId() + '.png';
-
-console.log(generatePhotoId());
-console.log(generateLat());
-console.log(generateLng());
-console.log(generateAvatarId());
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
-
 function generateRandomArray (someArr) {
   const arrCount = getRandomNumber(1, someArr.length - 1);
-  let randomArr = [];
-  let generateArr = createRandomIdFromRangeGenerator(0, (someArr.length - 1));
+  const randomArr = [];
+  const generateArr = createRandomIdFromRangeGenerator(0, (someArr.length - 1));
+
   for (let i = 0; i < arrCount; i++) {
     randomArr.push(someArr[generateArr()]);
   }
@@ -110,34 +113,40 @@ function generateRandomArray (someArr) {
   return randomArr;
 }
 
+function createURL() {
+  const url = `img/avatars/user + ${generateUrlId()} + .png`;
+  return url;
+}
 
-
-const createObject = () => {
-  return {
+// Почему нельзя писать функцию с 1 строкой в которой return
+const createRoom = () => {
+  const room = {
     autor: {
-      avatar: avatarUrl, //число в URL всегда один и тот же!(
+      avatar: createURL(),
     },
     offer: {
       title: getRandomArrayElement(TITLE),
-      address: generateLat() + ', ' + generateLng(),
+      address: `${generateLat()} + , + ${generateLng()}`,
       getPrice: getRandomNumber(3500, 10000),
       type: getRandomArrayElement(TYPE),
       getRooms: getRandomNumber(1, 5),
       guests: getRandomNumber(0, 5),
-      checkin: getRandomArrayElement(CHECKIN), //ПОЧЕМУ-ТО иногда элементом массива приходит undefined!!
+      checkin: getRandomArrayElement(CHECKIN),
       checkout: getRandomArrayElement(CHECKOUT),
-      features: generateRandomArray(FEATURES), //ПОЧЕМУ-ТО иногда элементом массива приходит undefined!! массив строк — массив случайной длины из значений. Значения не должны повторяться.
+      features: generateRandomArray(FEATURES),
       description: getRandomArrayElement(DESCRIPTION),
-      photos: generateRandomArray(PHOTOS) //массив строк — массив случайной длины из значений
+      photos: generateRandomArray(PHOTOS)
     },
     location: {
       lat: generateLat(),
       lng: generateLng(),
     }
-  }
-}
+  };
 
-console.log(createObject());
-console.log(createObject());
-console.log(createObject());
-console.log(createObject());
+  return room;
+};
+
+createRoom();
+
+const similarRooms = Array.from({length: 10}, createRoom);
+similarRooms();
