@@ -1,4 +1,4 @@
-const TITLE = [
+const TITLES = [
   'Olympus Hotel By Umbrella',
   'Apart Hotel Console',
   'Hotel Sky Station',
@@ -11,7 +11,7 @@ const TITLE = [
   'Vintage Hotel',
 ];
 
-const TYPE = [
+const TYPES = [
   'palace',
   'flat',
   'house',
@@ -19,13 +19,7 @@ const TYPE = [
   'hotel',
 ];
 
-const CHECKIN = [
-  '12:00',
-  '13:00',
-  '14:00',
-];
-
-const CHECKOUT = [
+const CHECKIN_TIMES = [
   '12:00',
   '13:00',
   '14:00',
@@ -40,7 +34,7 @@ const FEATURES = [
   'conditioner',
 ];
 
-const DESCRIPTION = [
+const DESCRIPTIONS = [
   'Апарт-отель VovaDoma с террасой и бесплатным Wi-Fi расположен в центре Тбилиси...',
   'Мягкие комнаты с наивысшей оценкой гостей города!',
   'Лучшее кофе в нашем лобби-баре!',
@@ -59,13 +53,7 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-
-function padStart(rawString, size, template) {
-  return rawString.toString().padStart(size, template);
-}
-
 function getRandomNumber(min, max, count = 0) {
-  // const rand = Math.abs(min) + Math.random() * (Math.abs(max) + 1 - Math.abs(min));
   const rand = Math.abs(min) + Math.random() * (Math.abs(max) - Math.abs(min));
   return Number(rand.toFixed(count));
 }
@@ -76,9 +64,7 @@ function createRandomIdFromRangeGenerator (min, max, count = 0) {
 
   return function () {
     let currentValue = getRandomNumber(min, max, count);
-    // Так как будет использоваться только для координат, можно забить на уникальность
     if (!count && previousValues.length >= (max - min + 1)) {
-      // console.error('Перебраны все числа из диапазона от ' + min + ' до ' + max);
       return null;
     }
     while (previousValues.includes(currentValue)) {
@@ -91,9 +77,7 @@ function createRandomIdFromRangeGenerator (min, max, count = 0) {
 
 function generateUrlId() {
   const ID = createRandomIdFromRangeGenerator(1, 10);
-  const IDStr = padStart(ID(), 2, 0);
-
-  return IDStr;
+  return ID().toString().padStart(2, 0);
 }
 
 const generateLat = createRandomIdFromRangeGenerator(35.65, 35.7, 5);
@@ -113,40 +97,29 @@ function generateRandomArray (someArr) {
   return randomArr;
 }
 
-function createURL() {
-  const url = `img/avatars/user + ${generateUrlId()} + .png`;
-  return url;
-}
+const createRoom = () => ({
+  autor: {
+    avatar: `img/avatars/user-${generateUrlId()}.png`,
+  },
+  offer: {
+    title: getRandomArrayElement(TITLES),
+    address: `${generateLat()}, ${generateLng()}`,
+    getPrice: getRandomNumber(3500, 10000),
+    type: getRandomArrayElement(TYPES),
+    getRooms: getRandomNumber(1, 5),
+    guests: getRandomNumber(0, 5),
+    checkin: getRandomArrayElement(CHECKIN_TIMES),
+    checkout: getRandomArrayElement(CHECKIN_TIMES),
+    features: generateRandomArray(FEATURES),
+    description: getRandomArrayElement(DESCRIPTIONS),
+    photos: generateRandomArray(PHOTOS)
+  },
+  location: {
+    lat: generateLat(),
+    lng: generateLng(),
+  }
+});
 
-// Почему нельзя писать функцию с 1 строкой в которой return
-const createRoom = () => {
-  const room = {
-    autor: {
-      avatar: createURL(),
-    },
-    offer: {
-      title: getRandomArrayElement(TITLE),
-      address: `${generateLat()} + , + ${generateLng()}`,
-      getPrice: getRandomNumber(3500, 10000),
-      type: getRandomArrayElement(TYPE),
-      getRooms: getRandomNumber(1, 5),
-      guests: getRandomNumber(0, 5),
-      checkin: getRandomArrayElement(CHECKIN),
-      checkout: getRandomArrayElement(CHECKOUT),
-      features: generateRandomArray(FEATURES),
-      description: getRandomArrayElement(DESCRIPTION),
-      photos: generateRandomArray(PHOTOS)
-    },
-    location: {
-      lat: generateLat(),
-      lng: generateLng(),
-    }
-  };
+const createRooms = (length) => Array.from({ length }, createRoom);
 
-  return room;
-};
-
-createRoom();
-
-const similarRooms = Array.from({length: 10}, createRoom);
-similarRooms();
+createRooms();
