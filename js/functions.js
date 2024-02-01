@@ -10,12 +10,14 @@ function getNumber(string) {
 
 getNumber();
 
+
 function getRandomNumber(min, max, count) {
   const rand = Math.abs(min) + Math.random() * (Math.abs(max) + 1 - Math.abs(min));
   return Number(rand.toFixed(count));
 }
 
 getRandomNumber();
+
 function isPalindrome(string) {
   string = string.toLowerCase().split('');
   return string.reverse().join('') === string.join('');
