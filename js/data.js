@@ -1,4 +1,4 @@
-import {getRandomNumber, getRandomArrayElement} from './util.js';
+import {getRandomNumber, getRandomArrayElement, shuffleArray} from './utils.js';
 
 const titles = [
   'Olympus Hotel By Umbrella',
@@ -55,23 +55,11 @@ const photos = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-function generateRandomArray (someArr) {
-  const arrCount = getRandomNumber(1, someArr.length - 1);
-  const randomArr = [];
-  const generateArr = getRandomNumber(0, (someArr.length - 1));
-
-  for (let i = 0; i < arrCount; i++) {
-    randomArr.push(someArr[generateArr]);
-  }
-
-  return randomArr;
-}
-
 const createOffer = (_, index) => {
   const latitude = getRandomNumber(35.65, 35.7, 5);
   const longitude = getRandomNumber(139.70000, 139.80000, 5);
   return {
-    autor: {
+    author: {
       avatar: `img/avatars/user-${(index + 1).toString().padStart(2, 0)}.png`,
     },
     offer: {
@@ -83,9 +71,9 @@ const createOffer = (_, index) => {
       guestCount: getRandomNumber(0, 5),
       checkin: getRandomArrayElement(checkinTimes),
       checkout: getRandomArrayElement(checkinTimes),
-      features: generateRandomArray(features),
+      features: shuffleArray(features),
       description: getRandomArrayElement(descriptions),
-      photos: generateRandomArray(photos)
+      photos: shuffleArray(photos)
     },
     location: {
       latitude,
