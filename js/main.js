@@ -1,4 +1,3 @@
-import {createOffers} from './data.js';
-import './popup.js';
+import {renderOffers} from './popup.js';
 
-createOffers();
+renderOffers(2);
