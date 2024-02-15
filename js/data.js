@@ -21,6 +21,14 @@ const types = [
   'hotel',
 ];
 
+const typesNames = {
+  'palace': 'Дворец',
+  'flat': 'Квартира',
+  'house': 'Дом',
+  'bungalow': 'Бунгало',
+  'hotel': 'Отель'
+};
+
 const checkinTimes = [
   '12:00',
   '13:00',
@@ -60,7 +68,7 @@ const createOffer = (_, index) => {
   const longitude = getRandomNumber(139.70000, 139.80000, 5);
   return {
     author: {
-      avatar: `img/avatars/user-${(index + 1).toString().padStart(2, 0)}.png`,
+      avatar: `img/avatars/user${(index + 1).toString().padStart(2, 0)}.png`,
     },
     offer: {
       title: getRandomArrayElement(titles),
@@ -84,4 +92,4 @@ const createOffer = (_, index) => {
 
 const createOffers = (offersCount) => Array.from({length: offersCount}, createOffer);
 
-export {createOffers};
+export {createOffers, typesNames};
