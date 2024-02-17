@@ -1,7 +1,12 @@
-import {renderOffers} from './popup.js';
-import {toggleFilter, toggleForm} from './form.js';
+import { createOffers } from './data.js';
+import { renderOffers } from './popup.js';
+import { hideFilters, hideForm } from './form.js';
 
-renderOffers(2);
+const OFFERS_COUNT = 10;
 
-toggleFilter(true);
-toggleForm(false);
+const offers = createOffers(OFFERS_COUNT);
+
+renderOffers(offers);
+
+hideFilters();
+hideForm();

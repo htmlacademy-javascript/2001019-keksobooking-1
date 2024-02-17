@@ -1,9 +1,9 @@
-import {createOffers, typesNames} from './data.js';
+import {typesNames} from './data.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const renderOffer = ({author, offer}) => {
+const createOfferPopupElement = ({author, offer}) => {
   const cardElement = cardTemplate.cloneNode(true);
 
   cardElement.querySelector('.popup__title').textContent = offer.title;
@@ -31,16 +31,15 @@ const renderOffer = ({author, offer}) => {
   cardElement.querySelector('.popup__photos img').src = offer.photos;
   cardElement.querySelector('.popup__avatar').src = author.avatar;
 
-  mapCanvas.appendChild(cardElement);
+  return cardElement;
 };
 
 
-const renderOffers = (count) => {
+const renderOffers = (offers) => {
   const offersListFragment = document.createDocumentFragment();
-  const offers = createOffers(count);
-
   offers.forEach((offerItem) => {
-    renderOffer(offerItem);
+    const offerElement = createOfferPopupElement(offerItem);
+    offersListFragment.appendChild(offerElement);
   });
   mapCanvas.appendChild(offersListFragment);
 };

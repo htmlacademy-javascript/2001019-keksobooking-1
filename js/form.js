@@ -1,46 +1,47 @@
-const toggleFilter = (disable) => {
-  const mapFilters = document.querySelector('.map__filters');
-  const filters = mapFilters.querySelectorAll('select, input');
+const mapFilters = document.querySelector('.map__filters');
+const filters = mapFilters.querySelectorAll('select, input');
+
+const addForm = document.querySelector('.ad-form');
+const fields = addForm.querySelectorAll('input, textarea, select, button');
+const sendButton = addForm.querySelector('.ad-form__submit');
+
+const showFilters = () => {
+  mapFilters.classList.remove('.map__filters--disabled');
+  filters.forEach((filter) => {
+    filter.disabled = false;
+  });
   const popups = document.querySelectorAll('.popup');
-
-  if (disable) {
-    filters.forEach((filter) => {
-      filter.disabled = true;
-      mapFilters.classList.add('map__filters--disabled');
-    });
-    popups.forEach((popup) => {
-      popup.classList.add('hidden');
-    });
-  } else {
-
-    filters.forEach((filter) => {
-      filter.disabled = false;
-      mapFilters.classList.remove('.map__filters--disabled');
-    });
-    popups.forEach((popup) => {
-      popup.classList.remove('hidden');
-    });
-  }
+  popups.forEach((popup) => {
+    popup.classList.remove('hidden');
+  });
 };
 
-const toggleForm = (disable) => {
-  const addForm = document.querySelector('.ad-form');
-  const fields = addForm.querySelectorAll('input, textarea, select');
-  const sendButton = addForm.querySelector('.ad-form__submit');
-
-  if (disable) {
-    fields.forEach((field) => {
-      field.disabled = true;
-      addForm.classList.add('ad-form--disabled');
-      sendButton.disabled = true;
-    });
-  } else {
-    fields.forEach((field) => {
-      field.disabled = false;
-      addForm.classList.remove('ad-form--disabled');
-      sendButton.disabled = false;
-    });
-  }
+const hideFilters = () => {
+  mapFilters.classList.add('map__filters--disabled');
+  filters.forEach((filter) => {
+    filter.disabled = true;
+  });
+  const popups = document.querySelectorAll('.popup');
+  popups.forEach((popup) => {
+    popup.classList.add('hidden');
+  });
 };
 
-export {toggleFilter, toggleForm};
+
+const showForm = () => {
+  addForm.classList.remove('ad-form--disabled');
+  sendButton.disabled = false;
+  fields.forEach((field) => {
+    field.disabled = false;
+  });
+};
+
+const hideForm = () => {
+  addForm.classList.add('ad-form--disabled');
+  sendButton.disabled = true;
+  fields.forEach((field) => {
+    field.disabled = true;
+  });
+};
+
+export {showFilters, hideFilters, showForm, hideForm};
