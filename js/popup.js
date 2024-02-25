@@ -44,4 +44,4 @@ const renderOffers = (offers) => {
   mapCanvas.appendChild(offersListFragment);
 };
 
-export {renderOffers};
+export {renderOffers, createOfferPopupElement};

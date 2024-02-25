@@ -6,7 +6,7 @@ const fields = addForm.querySelectorAll('input, textarea, select, button');
 const sendButton = addForm.querySelector('.ad-form__submit');
 
 const showFilters = () => {
-  mapFilters.classList.remove('.map__filters--disabled');
+  mapFilters.classList.remove('map__filters--disabled');
   filters.forEach((filter) => {
     filter.disabled = false;
   });
