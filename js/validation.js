@@ -1,36 +1,13 @@
 const adForm = document.querySelector('.ad-form');
+const roomsElement = adForm.querySelector('[name="rooms"]');
+const capacityElement = adForm.querySelector('[name="capacity"]');
+const titleElement = adForm.querySelector('#title');
+const timeInElement = adForm.querySelector('#timein');
+const timeOutElement = adForm.querySelector('#timeout');
+const typeElement = adForm.querySelector('#type');
+const priceElement = adForm.querySelector('#price');
+const addressElement = adForm.querySelector('#address');
 
-const pristine = new Pristine(adForm, {
-  classTo: 'ad-form__element',
-  errorClass: 'ad-form__element--invalid',
-  successClass: 'ad-form__element--valid',
-  errorTextParent: 'ad-form__element',
-  errorTextTag: 'span',
-  errorTextClass: 'ad-form__error'
-});
-
-function validateTitle (value) {
-  return value.length >= 30 && value.length <= 100;
-}
-
-pristine.addValidator(
-  adForm.querySelector('#title'),
-  validateTitle,
-  'Заголовок должен быть от 30 до 100 символов!)'
-);
-
-function validatePrice (value) {
-  return value < 100000;
-}
-
-pristine.addValidator(
-  adForm.querySelector('#price'),
-  validatePrice,
-  'Цена за ночь не может быть выше 100000!'
-);
-
-const roomCount = adForm.querySelector('[name="rooms"]');
-const capacityAmount = adForm.querySelector('[name="capacity"]');
 const capacityOption = {
   '1': ['1'],
   '2': ['1', '2'],
@@ -38,60 +15,76 @@ const capacityOption = {
   '100': ['0']
 };
 
-function validateCapacity () {
-  return capacityOption[roomCount.value].includes(capacityAmount.value);
-}
-
-pristine.addValidator(roomCount, validateCapacity, 'Увеличьте количество комнат или уменьшите количество гостей.');
-pristine.addValidator(capacityAmount, validateCapacity, 'Увеличьте количество комнат или уменьшите количество гостей.');
-
-
-const timeIn = adForm.querySelector('#timein');
-const timeOut = adForm.querySelector('#timeout');
-
-function validateCheckinTime () {
-  const timeInSelected = adForm.querySelector('#timein option:checked');
-  adForm.querySelector('#timeout').value = timeInSelected.value;
-
-  return true;
-}
-
-function validateCheckoutTime () {
-  const timeOutSelected = adForm.querySelector('#timeout option:checked');
-  adForm.querySelector('#timein').value = timeOutSelected.value;
-
-  return true;
-}
-
-pristine.addValidator(timeIn, validateCheckinTime, 'Вы можете пребывать не более суток');
-pristine.addValidator(timeOut, validateCheckoutTime, 'Вы можете пребывать не более суток');
-
-const typeField = adForm.querySelector('#type');
-const price = adForm.querySelector('#price');
 const minPrice = {
   'bungalow': 0,
   'flat': 1000,
   'hotel': 3000,
   'house': 5000,
-  'palace':10000
+  'palace': 10000
 };
+
+const MAX_PRICE = 100000;
+
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+
+function validateTitle (value) {
+  return value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
+}
+
+function validatePrice (value) {
+  return value < MAX_PRICE;
+}
+
+function validateCapacity () {
+  return capacityOption[roomsElement.value].includes(capacityElement.value);
+}
+
+function syncCheckOutTime () {
+  timeOutElement.value = timeInElement.value;
+}
+
+function syncCheckInTime () {
+  timeInElement.value = timeOutElement.value;
+}
 
 function validateMinPrice () {
   const selectedType = adForm.querySelector('#type option:checked');
-  return parseInt(price.value, 10) >= minPrice[selectedType.value];
+  return parseInt(priceElement.value, 10) >= minPrice[selectedType.value];
 }
 
 function getPriceErrorMessage () {
   const selectedType = adForm.querySelector('#type option:checked');
   return `Стоимость за сутки не может быть менее ${minPrice[selectedType.value]} рублей.`;
 }
-pristine.addValidator(typeField, validateMinPrice, 'Выберите другой тип жилья или увеличьте цену');
-pristine.addValidator(price, validateMinPrice, getPriceErrorMessage);
 
-const addressField = adForm.querySelector('#address');
-addressField.disabled = true;
+const initValidation = () => {
+  const pristine = new Pristine(adForm, {
+    classTo: 'ad-form__element',
+    errorClass: 'ad-form__element--invalid',
+    successClass: 'ad-form__element--valid',
+    errorTextParent: 'ad-form__element',
+    errorTextTag: 'span',
+    errorTextClass: 'ad-form__error'
+  }, false);
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+  pristine.addValidator(titleElement, validateTitle, 'Заголовок должен быть от 30 до 100 символов!)');
+  pristine.addValidator(priceElement, validatePrice, 'Цена за ночь не может быть выше 100000!');
+  pristine.addValidator(roomsElement, validateCapacity, 'Увеличьте количество комнат или уменьшите количество гостей.');
+  pristine.addValidator(capacityElement, validateCapacity, 'Увеличьте количество комнат или уменьшите количество гостей.');
+  pristine.addValidator(typeElement, validateMinPrice, 'Выберите другой тип жилья или увеличьте цену');
+  pristine.addValidator(priceElement, validateMinPrice, getPriceErrorMessage);
+
+  timeInElement.addEventListener('change', syncCheckOutTime);
+  timeOutElement.addEventListener('change', syncCheckInTime);
+
+  addressElement.disabled = true;
+
+  adForm.addEventListener('submit', (evt) => {
+    if (!pristine.validate()) {
+      evt.preventDefault();
+    }
+  });
+};
+
+export {initValidation};
