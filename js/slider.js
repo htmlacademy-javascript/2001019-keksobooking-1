@@ -1,6 +1,6 @@
 const sliderElement = document.querySelector('.ad-form__slider');
-const valueElement = document.querySelector('#price');
-const specialElement = document.querySelector('#type');
+const priceElement = document.querySelector('#price');
+const typeElement = document.querySelector('#type');
 const maxPrice = 100000;
 
 noUiSlider.create(sliderElement, {
@@ -18,11 +18,11 @@ noUiSlider.create(sliderElement, {
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  valueElement.value = sliderElement.noUiSlider.get();
+  priceElement.value = sliderElement.noUiSlider.get();
 });
 
 const changeMinPriceByType = (typeInput) => {
-  valueElement.value = 0;
+  priceElement.value = 0;
 
   const minPrices = {
     bungalow : 0,
@@ -43,9 +43,15 @@ const changeMinPriceByType = (typeInput) => {
   sliderElement.noUiSlider.set(minPrice);
 };
 
-
-specialElement.addEventListener('change', (evt) => {
+typeElement.addEventListener('change', (evt) => {
   changeMinPriceByType(evt.target);
 });
 
-changeMinPriceByType(specialElement);
+changeMinPriceByType(typeElement);
+
+const initSlider = () => {
+  changeMinPriceByType(typeElement);
+};
+
+export {initSlider};
+
