@@ -27,9 +27,23 @@ const createOfferPopupElement = ({author, offer}) => {
     }
   });
 
-  cardElement.querySelector('.popup__description').textContent = offer.description;
-  cardElement.querySelector('.popup__photos img').src = offer.photos;
-  cardElement.querySelector('.popup__avatar').src = author.avatar;
+  if (offer.description.length > 0) {
+    cardElement.querySelector('.popup__description').textContent = offer.description;
+  } else {
+    cardElement.querySelector('.popup__description').remove();
+  }
+
+  if (offer.photos > 0) {
+    cardElement.querySelector('.popup__photos img').src = offer.photos;
+  } else {
+    cardElement.querySelector('.popup__photos').remove();
+  }
+
+  if (author.avatar.length > 0) {
+    cardElement.querySelector('.popup__avatar').src = author.avatar;
+  } else {
+    cardElement.querySelector('.popup__avatar').remove();
+  }
 
   return cardElement;
 };
@@ -44,4 +58,4 @@ const renderOffers = (offers) => {
   mapCanvas.appendChild(offersListFragment);
 };
 
-export {renderOffers};
+export {renderOffers, createOfferPopupElement};
