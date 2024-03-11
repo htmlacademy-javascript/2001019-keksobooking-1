@@ -58,7 +58,7 @@ function getPriceErrorMessage () {
   return `Стоимость за сутки не может быть менее ${minPrice[selectedType.value]} рублей.`;
 }
 
-const initValidation = () => {
+const initValidation = (onSuccess) => {
   const pristine = new Pristine(adForm, {
     classTo: 'ad-form__element',
     errorClass: 'ad-form__element--invalid',
@@ -81,9 +81,12 @@ const initValidation = () => {
   addressElement.disabled = true;
 
   adForm.addEventListener('submit', (evt) => {
-    if (!pristine.validate()) {
-      evt.preventDefault();
+    evt.preventDefault();
+
+    if (pristine.validate()) {
+      onSuccess();
     }
+
   });
 };
 

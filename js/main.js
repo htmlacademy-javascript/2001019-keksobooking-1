@@ -1,12 +1,40 @@
-import { createOffers } from './data.js';
 import { initValidation } from './validation.js';
-import { createMarkers, initMap } from './map.js';
-import { initSlider } from './slider.js';
-import { hideFilters, hideForm, showFilters, showForm } from './form.js';
+import { createMarkers, initMap, resetAddress } from './map.js';
+import { initSlider, resetSlider } from './slider.js';
+import { hideFilters, hideForm, showFilters, showForm, resetForm, showSuccess, showError, getFormData, blockSubmitButton, unblockSubmitButton } from './form.js';
+import { getOffers, sendData } from './api.js';
+import { showAlert } from './utils.js';
 
-const OFFERS_COUNT = 20;
 
-initValidation();
+const OFFERS_COUNT = 10;
+const resetElement = document.querySelector('.ad-form__reset');
+
+const clearForm = () => {
+  resetForm();
+  resetAddress();
+  resetSlider();
+};
+
+resetElement.addEventListener('click', () => {
+  clearForm();
+});
+
+const onSuccessValidation = () => {
+  blockSubmitButton();
+  sendData(getFormData())
+    .then(() => {
+      clearForm();
+      showSuccess();
+    })
+    .catch(() => {
+      showError();
+    })
+    .finally(() => {
+      unblockSubmitButton();
+    });
+};
+
+initValidation(onSuccessValidation);
 initSlider();
 
 hideFilters();
@@ -17,5 +45,11 @@ const map = initMap(() => {
   showForm();
 });
 
-const offers = createOffers(OFFERS_COUNT);
-createMarkers(map, offers);
+getOffers()
+  .then((offers) => {
+    createMarkers(map, offers.slice(0, OFFERS_COUNT));
+  })
+  .catch(() => {
+    showAlert('Не удалось загрузить данные:( Попробуйте еще!');
+    hideFilters();
+  });

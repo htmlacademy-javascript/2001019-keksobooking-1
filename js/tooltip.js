@@ -10,10 +10,10 @@ const createOfferPopupElement = ({author, offer}) => {
   cardElement.querySelector('.popup__text--address').textContent = offer.address;
   cardElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
   cardElement.querySelector('.popup__type').textContent = typesNames[offer.type];
-  cardElement.querySelector('.popup__text--capacity').textContent = `${offer.roomCount} комнаты для ${offer.guestCount} гостей`;
+  cardElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
   cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
-  const userOffers = offer.features;
+  const userOffers = offer.features ?? [];
   const featuresContainer = cardElement.querySelector('.popup__features');
   const featuresList = featuresContainer.querySelectorAll('.popup__feature');
 
@@ -27,7 +27,7 @@ const createOfferPopupElement = ({author, offer}) => {
     }
   });
 
-  if (offer.description.length > 0) {
+  if (offer.description && offer.description.length > 0) {
     cardElement.querySelector('.popup__description').textContent = offer.description;
   } else {
     cardElement.querySelector('.popup__description').remove();
