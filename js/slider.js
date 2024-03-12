@@ -48,7 +48,13 @@ const initSlider = () => {
   });
 
   changeMinPriceByType(typeElement);
+
+  return sliderElement;
 };
 
-export {initSlider};
+const resetSlider = () => {
+  sliderElement.noUiSlider.reset();
+};
+
+export {initSlider, resetSlider};
 

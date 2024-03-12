@@ -21,6 +21,14 @@ const centerCoordinates = {
   lng: 139.753927,
 };
 
+const mainPinMarker = L.marker(
+  centerCoordinates,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
 const initMap = (onLoad) => {
   addressElement.value = `${centerCoordinates.lat}, ${centerCoordinates.lng}`;
 
@@ -35,13 +43,6 @@ const initMap = (onLoad) => {
     },
   ).addTo(map);
 
-  const mainPinMarker = L.marker(
-    centerCoordinates,
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
   mainPinMarker.addTo(map);
   mainPinMarker.on('moveend', (evt) => {
     const location = evt.target.getLatLng();
@@ -55,8 +56,8 @@ const createMarker = (offer, markerGroup) => {
   const marker = L
     .marker(
       {
-        lat: offer.location.latitude,
-        lng: offer.location.longitude,
+        lat: offer.location.lat,
+        lng: offer.location.lng,
       },
       {
         icon,
@@ -78,4 +79,9 @@ const createMarkers = (map, offers) => {
   });
 };
 
-export {createMarkers, initMap};
+const resetAddress = () => {
+  mainPinMarker.setLatLng(centerCoordinates);
+  addressElement.value = `${centerCoordinates.lat}, ${centerCoordinates.lng}`;
+};
+
+export {createMarkers, initMap, resetAddress};
