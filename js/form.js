@@ -1,11 +1,10 @@
-import { isEscapeKey } from './utils.js';
-
+//import { isEscapeKey } from './utils.js';
 const mapFilters = document.querySelector('.map__filters');
 const filters = mapFilters.querySelectorAll('select, input');
 const addForm = document.querySelector('.ad-form');
 const fields = addForm.querySelectorAll('input, textarea, select, button');
 const sendButton = addForm.querySelector('.ad-form__submit');
-const bodyElement = document.querySelector('body');
+const resetElement = document.querySelector('.ad-form__reset');
 
 const submitButtonText = {
   IDLE: 'Опубликовать',
@@ -13,10 +12,6 @@ const submitButtonText = {
 };
 
 const getFormData = () => new FormData(addForm);
-
-const resetForm = () => {
-  addForm.reset();
-};
 
 const showFilters = () => {
   mapFilters.classList.remove('map__filters--disabled');
@@ -40,7 +35,6 @@ const hideFilters = () => {
   });
 };
 
-
 const showForm = () => {
   addForm.classList.remove('ad-form--disabled');
   sendButton.disabled = false;
@@ -57,44 +51,6 @@ const hideForm = () => {
   });
 };
 
-const showSuccess = () => {
-  const successTemplate = document.querySelector('#success').content.querySelector('.success');
-  const successElement = successTemplate.cloneNode(true);
-  bodyElement.appendChild(successElement);
-
-  document.addEventListener('click', () => {
-    successElement.remove();
-
-  });
-
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      successElement.remove();
-    }
-  });
-};
-
-const showError = () => {
-  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-  const errorElement = errorTemplate.cloneNode(true);
-  bodyElement.appendChild(errorElement);
-  const errorButtonElement = errorElement.querySelector('.error__button');
-
-  errorButtonElement.addEventListener('click', () => {
-    errorElement.classList.add('hidden');
-  });
-
-  document.addEventListener('click', () => {
-    errorElement.classList.add('hidden');
-  });
-
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      errorElement.classList.add('hidden');
-    }
-  });
-};
-
 const blockSubmitButton = () => {
   sendButton.disabled = true;
   sendButton.textContent = submitButtonText.SENDING;
@@ -105,4 +61,13 @@ const unblockSubmitButton = () => {
   sendButton.textContent = submitButtonText.IDLE;
 };
 
-export {showFilters, hideFilters, showForm, hideForm, resetForm, showError, showSuccess, getFormData, blockSubmitButton, unblockSubmitButton};
+const resetForm = () => {
+  addForm.reset();
+};
+
+const initForm = (onReset) => {
+  resetElement.addEventListener('click', onReset);
+}
+
+
+export {showFilters, hideFilters, showForm, hideForm, resetForm, initForm, getFormData, blockSubmitButton, unblockSubmitButton};
