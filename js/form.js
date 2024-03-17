@@ -67,7 +67,7 @@ const resetForm = () => {
 
 const initForm = (onReset) => {
   resetElement.addEventListener('click', onReset);
-}
+};
 
 
 export {showFilters, hideFilters, showForm, hideForm, resetForm, initForm, getFormData, blockSubmitButton, unblockSubmitButton};

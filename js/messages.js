@@ -1,4 +1,4 @@
-import { isEscapeKey } from "./utils.js";
+import { isEscapeKey } from './utils.js';
 
 let successElement;
 
@@ -25,7 +25,7 @@ const showSuccess = () => {
   document.body.appendChild(successElement);
   document.addEventListener('click', onSuccessMessageClick);
   document.addEventListener('keydown', onSuccessMessageDocumentKeydown);
-}
+};
 
 let errorElement;
 let errorButtonElement;
@@ -35,7 +35,7 @@ const closeErrorMessage = () => {
   errorButtonElement.removeEventListener('click', onErrorMessageCloseButtonClick);
   document.removeEventListener('click', onErrorMessageClick);
   document.removeEventListener('keydown', onErrorMessageDocumentKeydown);
-}
+};
 
 function onErrorMessageClick() {
   closeErrorMessage();
