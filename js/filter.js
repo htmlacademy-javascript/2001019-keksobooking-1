@@ -60,7 +60,6 @@ const checkFeatures = (offerItem, checkedFeatures) => {
 const filterOffers = (offers, filterData) => {
   const checkedFeatuesElements = document.querySelectorAll('input[name="features"]:checked');
   const checkedFeatues = Array.from(checkedFeatuesElements).map((item) => item.value);
-
   return offers.filter((offerItem) => {
 
     if (!checkType(offerItem,filterData)) {
