@@ -21,6 +21,14 @@ const centerCoordinates = {
   lng: 139.753927,
 };
 
+const mainPinMarker = L.marker(
+  centerCoordinates,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
 const initMap = (onLoad) => {
   addressElement.value = `${centerCoordinates.lat}, ${centerCoordinates.lng}`;
 
@@ -35,30 +43,23 @@ const initMap = (onLoad) => {
     },
   ).addTo(map);
 
-  const mainPinMarker = L.marker(
-    centerCoordinates,
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-
   mainPinMarker.addTo(map);
   mainPinMarker.on('moveend', (evt) => {
     const location = evt.target.getLatLng();
     addressElement.value = `${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`;
   });
 
-  return map;
+  const markerGroup = L
+    .layerGroup()
+    .addTo(map);
+
+  return markerGroup;
 };
 
 const createMarker = (offer, markerGroup) => {
   const marker = L
     .marker(
-      {
-        lat: offer.location.latitude,
-        lng: offer.location.longitude,
-      },
+      offer.location,
       {
         icon,
       },
@@ -69,14 +70,17 @@ const createMarker = (offer, markerGroup) => {
     .bindPopup(createOfferPopupElement(offer));
 };
 
-const createMarkers = (map, offers) => {
-  const markerGroup = L
-    .layerGroup()
-    .addTo(map);
+const createMarkers = (markerGroup, offers) => {
+  markerGroup.clearLayers();
 
   offers.forEach((offer) => {
     createMarker(offer, markerGroup);
   });
 };
 
-export {createMarkers, initMap};
+const resetAddress = () => {
+  mainPinMarker.setLatLng(centerCoordinates);
+  addressElement.value = `${centerCoordinates.lat}, ${centerCoordinates.lng}`;
+};
+
+export {createMarkers, initMap, resetAddress};
