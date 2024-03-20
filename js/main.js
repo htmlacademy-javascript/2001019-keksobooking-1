@@ -1,29 +1,34 @@
 import { initValidation } from './validation.js';
 import { createMarkers, initMap, resetAddress } from './map.js';
 import { initSlider, resetSlider } from './slider.js';
-import { hideFilters, hideForm, showFilters, showForm, resetForm, showSuccess, showError, getFormData, blockSubmitButton, unblockSubmitButton } from './form.js';
+import {
+  hideFilters,
+  hideForm,
+  showFilters,
+  showForm,
+  initForm,
+  getFormData,
+  blockSubmitButton,
+  unblockSubmitButton,
+  resetForm,
+} from './form.js';
+import { showSuccess, showError } from './messages.js';
 import { getOffers, sendData } from './api.js';
 import { showAlert } from './utils.js';
+import { initFilter } from './filter.js';
 
+hideFilters();
+hideForm();
 
 const OFFERS_COUNT = 10;
-const resetElement = document.querySelector('.ad-form__reset');
-
-const clearForm = () => {
-  resetForm();
-  resetAddress();
-  resetSlider();
-};
-
-resetElement.addEventListener('click', () => {
-  clearForm();
-});
 
 const onSuccessValidation = () => {
   blockSubmitButton();
   sendData(getFormData())
     .then(() => {
-      clearForm();
+      resetForm();
+      resetAddress();
+      resetSlider();
       showSuccess();
     })
     .catch(() => {
@@ -36,18 +41,25 @@ const onSuccessValidation = () => {
 
 initValidation(onSuccessValidation);
 initSlider();
+initForm(() => {
+  resetForm();
+  resetAddress();
+  resetSlider();
+});
 
-hideFilters();
-hideForm();
-
-const map = initMap(() => {
+const markerGroup = initMap(() => {
   showFilters();
   showForm();
 });
 
+const filtersCallback = (offers) => {
+  createMarkers(markerGroup, offers.slice(0, OFFERS_COUNT));
+};
+
 getOffers()
   .then((offers) => {
-    createMarkers(map, offers.slice(0, OFFERS_COUNT));
+    filtersCallback(offers);
+    initFilter(offers, filtersCallback);
   })
   .catch(() => {
     showAlert('Не удалось загрузить данные:( Попробуйте еще!');

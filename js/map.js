@@ -49,16 +49,17 @@ const initMap = (onLoad) => {
     addressElement.value = `${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`;
   });
 
-  return map;
+  const markerGroup = L
+    .layerGroup()
+    .addTo(map);
+
+  return markerGroup;
 };
 
 const createMarker = (offer, markerGroup) => {
   const marker = L
     .marker(
-      {
-        lat: offer.location.lat,
-        lng: offer.location.lng,
-      },
+      offer.location,
       {
         icon,
       },
@@ -69,10 +70,8 @@ const createMarker = (offer, markerGroup) => {
     .bindPopup(createOfferPopupElement(offer));
 };
 
-const createMarkers = (map, offers) => {
-  const markerGroup = L
-    .layerGroup()
-    .addTo(map);
+const createMarkers = (markerGroup, offers) => {
+  markerGroup.clearLayers();
 
   offers.forEach((offer) => {
     createMarker(offer, markerGroup);
