@@ -3,8 +3,8 @@ const filterElement = document.querySelector('.map__filters');
 const checkType = (offerItem, filterData) => {
   const housingType = filterData.get('housing-type');
 
-  if (housingType !== 'any') {
-    return offerItem.offer.type === housingType;
+  if (housingType !== 'any' && offerItem.offer.type !== housingType) {
+    return false;
   }
 
   return true;
@@ -89,6 +89,5 @@ const initFilter = (offers, callback) => {
     callback(filterOffers(offers, filterData));
   });
 };
-
 
 export { initFilter };

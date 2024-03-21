@@ -16,6 +16,9 @@ import { showSuccess, showError } from './messages.js';
 import { getOffers, sendData } from './api.js';
 import { showAlert } from './utils.js';
 import { initFilter } from './filter.js';
+import './avatar.js';
+import './form-photo.js';
+
 
 hideFilters();
 hideForm();

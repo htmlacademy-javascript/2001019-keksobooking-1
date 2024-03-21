@@ -1,4 +1,3 @@
-//import { isEscapeKey } from './utils.js';
 const mapFilters = document.querySelector('.map__filters');
 const filters = mapFilters.querySelectorAll('select, input');
 const addForm = document.querySelector('.ad-form');
