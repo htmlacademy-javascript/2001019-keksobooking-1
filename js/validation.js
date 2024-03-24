@@ -6,7 +6,6 @@ const timeInElement = adForm.querySelector('#timein');
 const timeOutElement = adForm.querySelector('#timeout');
 const typeElement = adForm.querySelector('#type');
 const priceElement = adForm.querySelector('#price');
-const addressElement = adForm.querySelector('#address');
 
 const capacityOption = {
   '1': ['1'],
@@ -77,8 +76,6 @@ const initValidation = (onSuccess) => {
 
   timeInElement.addEventListener('change', syncCheckOutTime);
   timeOutElement.addEventListener('change', syncCheckInTime);
-
-  addressElement.disabled = true;
 
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();

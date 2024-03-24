@@ -15,12 +15,23 @@ import {
 import { showSuccess, showError } from './messages.js';
 import { getOffers, sendData } from './api.js';
 import { showAlert } from './utils.js';
-import { initFilter } from './filter.js';
+import { initFilter, resetFilters } from './filter.js';
 
 hideFilters();
 hideForm();
 
 const OFFERS_COUNT = 10;
+const markerGroup = initMap(() => {
+  showFilters();
+  showForm();
+});
+
+initSlider();
+initForm(() => {
+  resetForm();
+  resetAddress();
+  resetSlider();
+});
 
 const onSuccessValidation = () => {
   blockSubmitButton();
@@ -36,21 +47,12 @@ const onSuccessValidation = () => {
     })
     .finally(() => {
       unblockSubmitButton();
+      resetFilters();
+      markerGroup._map.closePopup();
     });
 };
 
 initValidation(onSuccessValidation);
-initSlider();
-initForm(() => {
-  resetForm();
-  resetAddress();
-  resetSlider();
-});
-
-const markerGroup = initMap(() => {
-  showFilters();
-  showForm();
-});
 
 const filtersCallback = (offers) => {
   createMarkers(markerGroup, offers.slice(0, OFFERS_COUNT));
