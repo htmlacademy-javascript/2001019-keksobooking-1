@@ -1,4 +1,10 @@
-import {typesNames} from './data.js';
+const typesNames = {
+  'palace': 'Дворец',
+  'flat': 'Квартира',
+  'house': 'Дом',
+  'bungalow': 'Бунгало',
+  'hotel': 'Отель'
+};
 
 const mapCanvas = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
